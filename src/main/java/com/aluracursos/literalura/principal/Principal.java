@@ -66,16 +66,16 @@ public class Principal {
                     listarLibrosPorIdioma();
                     break;
                 case 7:
-                    //estadisticas();
+                    estadisticas();
                     break;
                 case 8:
-                    //top10();
+                    top10();
                     break;
                 case 9:
-                    //listarAutorPorFechaNacimiento();
+                    listarAutorPorFechaNacimiento();
                     break;
                 case 10:
-                    //listarAutorPorFechaFallecimiento();
+                    listarAutorPorFechaFallecimiento();
                     break;
                 case 0:
                     System.out.println("Cerrando aplicación ... \n");
@@ -262,8 +262,63 @@ public class Principal {
         }
     }
     //7 - Estadísticas generales
+    private void estadisticas() {
+        var json = consumoApi.obtenerDatos(URL_BASE);
+        var datos = conversor.obtenerDatos(json, Datos.class);
+        DoubleSummaryStatistics est = datos.resultados().stream()
+                .filter(d -> d.numeroDeDescargas() > 0)
+                .collect(Collectors.summarizingDouble(DatosLibro::numeroDeDescargas));
+
+        System.out.println("Cantidad media de descargas: " + est.getAverage());
+        System.out.println("Cantidad máxima de descargas: " + est.getMax());
+        System.out.println("Cantidad mínima de descargas: " + est.getMin());
+        System.out.println("Cantidad de registros evaluados para calcular estadísticas: " + est.getCount());
+    }
     //8 - Top 10 libros más descargados
+
+    private void top10() {
+        System.out.println("\nTop 10 libros más descargados:\n");
+        var json = consumoApi.obtenerDatos(URL_BASE);
+        var datos = conversor.obtenerDatos(json, Datos.class);
+        datos.resultados().stream()
+                .sorted(Comparator.comparing(DatosLibro::numeroDeDescargas).reversed())
+                .limit(10)
+                .forEach(l ->
+                        System.out.println("[" + l.numeroDeDescargas() + " descargas] - " + l.titulo()));
+    }
+
     //9 - Listar autores nacidos en algún año
+    private void listarAutorPorFechaNacimiento(){
+        System.out.println("Ingrese el año de nacimiento del autor");
+        try {
+            var nacimiento = Integer.valueOf(teclado.nextLine());
+            List<Autor> autores = repository.listarAutorPorFechaNacimiento(nacimiento);
+            if (!autores.isEmpty()) {
+                autores.stream()
+                        .forEach(System.out::println);
+            } else {
+                System.out.println("No se encontró ningún actor nacido en este año");
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese un año válido. - Warning: " + e.getMessage());
+        }
+    }
     //10 - Listar autores fallecidos en algún año
+    private void listarAutorPorFechaFallecimiento(){
+        System.out.println("Ingrese el año de fallecimiento del autor");
+        try {
+            var fallecimiento = Integer.valueOf(teclado.nextLine());
+            List<Autor> autor = repository.listarAutorPorFechaFallecimiento(fallecimiento);
+            if (!autor.isEmpty()) {
+                autor.stream()
+                        .forEach(System.out::println);
+            } else {
+                System.out.println("No se encontró ningún actor fallecido en este año");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese un año válido. - Warning: " + e.getMessage());
+        }
+    }
 }
 
