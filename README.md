@@ -48,4 +48,4 @@
 ## Alcances Futuros ⏱️
 - **`Desarrollo de interfaz`**: generar una interfaz gráfica ejecutable en el navegador, que permita la interacción del usuario con el programa y haga más dinamica la experiencia con él y que permitan la gestión de las consultas de una forma mejor.
 - **`Cuentas de Usuario`**: permitir que los usuarios puedan crear su perfil en el que puedan guardar la información de las consultas bibliograficas realizadas
-- **`Integrar otras API`**: aumentar la confianza y veracidad de los resultados integrando en el funcionamiento otras APIs, que suministren información que el API actual no posea y complemente la experiencia de busqueda de los usuarios.pueda seleccionar a que api realizar la solictud de cambio de divisas.
+- **`Integrar otras API`**: aumentar la confianza y veracidad de los resultados integrando en el funcionamiento otras APIs, que suministren información que el API actual no posea y complemente la experiencia de busqueda de los usuarios.pueda seleccionar a que api realizar las consultas bibliograficas.
